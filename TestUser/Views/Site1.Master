@@ -1,0 +1,33 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="TestUser.Views.Site1" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <div class="container">
+            <aside>
+                <ul>
+                    <li>
+                    <asp:LinkButton ID="lbHome" runat="server" OnClick="lbHome_Click">Главная</asp:LinkButton>
+                    </li>
+                    <li>
+                    <asp:LinkButton ID="lbPosition" runat="server"  OnClick="lbPosition_Click">Должность</asp:LinkButton>
+                    </li>
+                </ul>
+            </aside>
+            <section>
+ <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+            </section>
+        </div>
+    </form>
+</body>
+</html>
