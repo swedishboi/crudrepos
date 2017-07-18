@@ -67,6 +67,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Views\Site1.Master" />
+    <Content Include="Views\Accounting.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -78,30 +79,52 @@
     <Content Include="Views\Main.aspx" />
     <Content Include="Views\Position.aspx" />
     <Content Include="Views\ItemType.aspx" />
+    <Content Include="Views\Home.aspx" />
+    <Content Include="Views\Agenda.aspx" />
+    <Content Include="Views\Maps.aspx" />
+    <Content Include="Views\Job.aspx" />
+    <Content Include="Views\Settings.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\CharacteristicRepository.cs" />
+    <Compile Include="DAL\DateTypeRepository.cs" />
+    <Compile Include="DAL\ItemRepository.cs" />
     <Compile Include="DAL\ItemTypeRepository.cs" />
+    <Compile Include="DAL\LocationRepository.cs" />
     <Compile Include="DAL\LocationTypeRepository.cs" />
     <Compile Include="DAL\PositionRepository.cs" />
     <Compile Include="DAL\ProfileRepository.cs" />
+    <Compile Include="DAL\UnitRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
     <Compile Include="DTO\CharacteristicDTO.cs" />
     <Compile Include="DTO\DateTypeDTO.cs" />
+    <Compile Include="DTO\ItemDTO.cs" />
     <Compile Include="DTO\ItemTypeDTO.cs" />
+    <Compile Include="DTO\LocationDTO.cs" />
     <Compile Include="DTO\LocationTypeDTO.cs" />
     <Compile Include="DTO\PositionDTO.cs" />
     <Compile Include="DTO\ProfileDTO.cs" />
+    <Compile Include="DTO\UnitDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Models\Characteristic.cs" />
     <Compile Include="Models\DateType.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemType.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LocationType.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\Unit.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Accounting.Master.cs">
+      <DependentUpon>Accounting.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Accounting.Master.designer.cs">
+      <DependentUpon>Accounting.Master</DependentUpon>
+    </Compile>
     <Compile Include="Views\Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -129,6 +152,41 @@
     </Compile>
     <Compile Include="Views\ItemType.aspx.designer.cs">
       <DependentUpon>ItemType.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Agenda.aspx.cs">
+      <DependentUpon>Agenda.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Agenda.aspx.designer.cs">
+      <DependentUpon>Agenda.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Maps.aspx.cs">
+      <DependentUpon>Maps.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Maps.aspx.designer.cs">
+      <DependentUpon>Maps.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Job.aspx.cs">
+      <DependentUpon>Job.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Job.aspx.designer.cs">
+      <DependentUpon>Job.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings.aspx.cs">
+      <DependentUpon>Settings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Settings.aspx.designer.cs">
+      <DependentUpon>Settings.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />

@@ -1,0 +1,48 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Accounting.master.cs" Inherits="TestUser.Views.Accounting" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="wrapper">
+            <aside>
+                <header>
+                    <span>
+                        здравствуйте Name Patronymic
+                    </span>
+                    <span>
+                        Вы вошли как Администратор
+                    </span>
+                </header>
+                <ul id="nav" runat="server">
+                    <li><a href="~/Views/Home.aspx" runat="server">Главная</a></li>
+                    <li>
+                        <a href="~/Views/Agenda.aspx" runat="server">Повестка дня</a>
+                        <ul>
+                            <li>Задачи</li>
+                            <li>Заметки</li>
+                            <li>Календарь</li>
+                            <li>Расписание</li>
+                            <li>Задачи</li>
+                        </ul>
+                    </li>
+                    <li><a href="~/Views/Job.aspx" runat="server">Работа</a></li>
+                    <li><a href="~/Views/Maps.aspx" runat="server">Карта</a></li>
+                    <li><a href="~/Views/Settings.aspx" runat="server">Настройки</a></li>
+                    <li>Помощь</li>
+                </ul>
+            </aside>
+            <section>
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+            </section>
+        </div>
+    </form>
+</body>
+</html>
