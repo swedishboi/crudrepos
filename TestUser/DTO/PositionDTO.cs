@@ -7,7 +7,7 @@ namespace TestUser.DTO
 {
     public class PositionDTO
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        public int positionId { get; set; }
+        public string positionName { get; set; }
     }
 }

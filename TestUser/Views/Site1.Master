@@ -21,6 +21,9 @@
                     <li>
                     <asp:LinkButton ID="lbPosition" runat="server"  OnClick="lbPosition_Click">Должность</asp:LinkButton>
                     </li>
+                    <li>
+                    <asp:LinkButton ID="lbItemType" runat="server"  OnClick="lbItemType_Click">Категории</asp:LinkButton>
+                    </li>
                 </ul>
             </aside>
             <section>

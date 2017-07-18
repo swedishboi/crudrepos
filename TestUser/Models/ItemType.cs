@@ -10,8 +10,9 @@ namespace TestUser.Models
 {
     public class ItemType
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        public int itemTypeId { get; set; }
+        public string itemTypeName { get; set; }
+
         public List<ItemType> GetAll()
         {
             List<ItemTypeDTO> itemTypesDTOList = new ItemTypeRepository().SelectAll();
@@ -22,11 +23,29 @@ namespace TestUser.Models
             {
                 itemTypesModelsList.Add(new ItemType
                 {
-                    id = i.id,
-                    name = i.name
+                    itemTypeId = i.itemTypeId,
+                    itemTypeName = i.itemTypeName
                 });
             }
             return itemTypesModelsList;
+        }
+
+        public bool Remove(int _id)
+        {
+            bool flag = new ItemTypeRepository().Delete(_id);
+            return flag;
+        }
+
+        public bool Edit(int _id, string _name)
+        {
+            bool flag = new ItemTypeRepository().Update(_id, _name);
+            return flag;
+        }
+
+        public bool Add(string _name)
+        {
+            bool flag = new ItemTypeRepository().Insert(_name);
+            return flag;
         }
     }
 }

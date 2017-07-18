@@ -28,5 +28,10 @@ namespace TestUser.Views
         {
             Response.Redirect("~/Views/Position.aspx");
         }
+
+        protected void lbItemType_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Views/ItemType.aspx");
+        }
     }
 }

@@ -13,6 +13,10 @@ namespace TestUser.DAL
     public class ProfileRepository
     {
         string sqlExpSelect = "select * from T_Profile";
+        string sqlExpUpdate = "update T_Profile set profileName = @profileName where profileId = @profileId";
+        string sqlExpDelete = "delete from T_Profile where profileId = @profileId";
+        string sqlExpInsert = "insert into T_Profile (profileName) values (@profileName)";
+
         public List<ProfileDTO> SelectAll()
         {
             List<ProfileDTO> profilesDTOList = null;
@@ -30,8 +34,8 @@ namespace TestUser.DAL
                             {
                                 profilesDTOList.Add(new ProfileDTO()
                                 {
-                                    id = reader.GetInt32(0),
-                                    name = reader.GetString(1)
+                                    profileId = reader.GetInt32(0),
+                                    profileName = reader.GetString(1)
                                 });
                             }
                         }
@@ -40,6 +44,86 @@ namespace TestUser.DAL
                 connect.Close();
             }
             return profilesDTOList;
+        }
+        public bool Update(int _id, string _name)
+        {
+            bool flag = false;
+            if (IsNull(_name)) return flag;
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(sqlExpUpdate, connect))
+                    {
+                        command.Parameters.Add("@profileId", SqlDbType.Int).Value = _id;
+                        command.Parameters.Add("@profileName", SqlDbType.NVarChar).Value = _name;
+                        connect.Open();
+                        command.ExecuteNonQuery();
+                    }
+                    connect.Close();
+                }
+                flag = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return flag;
+        }
+
+        public bool Delete(int _id)
+        {
+            bool flag = false;
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(sqlExpDelete, connect))
+                    {
+                        command.Parameters.Add("@profileId", SqlDbType.Int).Value = _id;
+                        connect.Open();
+                        command.ExecuteNonQuery();
+                    }
+                    connect.Close();
+                }
+                flag = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return flag;
+        }
+
+        public bool Insert(string _name)
+        {
+            bool flag = false;
+            if (IsNull(_name)) return flag;
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(sqlExpInsert, connect))
+                    {
+                        command.Parameters.Add("@profileName", SqlDbType.NVarChar).Value = _name;
+                        connect.Open();
+                        command.ExecuteNonQuery();
+                    }
+                    connect.Close();
+                }
+                flag = true;
+            }
+            catch (Exception ex)
+            {
+            }
+            return flag;
+        }
+
+        public bool IsNull(string _name)
+        {
+            List<ProfileDTO> list = SelectAll();
+            ProfileDTO profile = list.Where(p => p.profileName == _name).FirstOrDefault();
+            return profile != null ? true : false;
         }
     }//end
 }

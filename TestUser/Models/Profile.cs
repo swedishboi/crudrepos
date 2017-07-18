@@ -10,8 +10,8 @@ namespace TestUser.Models
 {
     public class Profile
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        public int profileId { get; set; }
+        public string profileName { get; set; }
         public List<Profile> GetAll()
         {
             List<ProfileDTO> profilesDTOList = new ProfileRepository().SelectAll();
@@ -22,11 +22,28 @@ namespace TestUser.Models
             {
                 profilesModelsList.Add(new Profile
                 {
-                    id = i.id,
-                    name = i.name
+                    profileId = i.profileId,
+                    profileName = i.profileName
                 });
             }
             return profilesModelsList;
+        }
+        public bool Remove(int _id)
+        {
+            bool flag = new ProfileRepository().Delete(_id);
+            return flag;
+        }
+
+        public bool Edit(int _id, string _name)
+        {
+            bool flag = new ProfileRepository().Update(_id, _name);
+            return flag;
+        }
+
+        public bool Add(string _name)
+        {
+            bool flag = new ProfileRepository().Insert(_name);
+            return flag;
         }
     }//end
 }

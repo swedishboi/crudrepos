@@ -5,9 +5,9 @@ using System.Web;
 
 namespace TestUser.DTO
 {
-    public class ProfileDTO
+    public class DateTypeDTO
     {
-        public int profileId { get; set; }
-        public string profileName { get; set; }
+        public int dateTypeId { get; set; }
+        public string dateTypeName { get; set; }
     }
 }

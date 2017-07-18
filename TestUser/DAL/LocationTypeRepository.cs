@@ -10,16 +10,16 @@ using TestUser.DTO;
 
 namespace TestUser.DAL
 {
-    public class ItemTypeRepository
+    public class LocationTypeRepository
     {
-        string sqlExpSelect = "select * from T_ItemType";
-        string sqlExpUpdate = "update T_ItemType set itemTypeName = @itemTypeName where itemTypeId = @itemTypeId";
-        string sqlExpDelete = "delete from T_ItemType where itemTypeId = @itemTypeId";
-        string sqlExpInsert = "insert into T_ItemType (itemTypeName) values (@itemTypeName)";
+        string sqlExpSelect = "select * from T_LocationType";
+        string sqlExpUpdate = "update T_LocationType set locationTypeName = @locationTypeName where locationTypeId = @locationTypeId";
+        string sqlExpDelete = "delete from T_LocationType where locationTypeId = @locationTypeId";
+        string sqlExpInsert = "insert into T_LocationType (locationTypeName) values (@locationTypeName)";
 
-        public List<ItemTypeDTO> SelectAll()
+        public List<LocationTypeDTO> SelectAll()
         {
-            List<ItemTypeDTO> itemTypesDTOList = null;
+            List<LocationTypeDTO> locationTypesDTOList = null;
             using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
             {
                 using (SqlCommand command = new SqlCommand(sqlExpSelect, connect))
@@ -29,13 +29,13 @@ namespace TestUser.DAL
                     {
                         if (reader.HasRows)
                         {
-                            itemTypesDTOList = new List<ItemTypeDTO>();
+                            locationTypesDTOList = new List<LocationTypeDTO>();
                             while (reader.Read())
                             {
-                                itemTypesDTOList.Add(new ItemTypeDTO
+                                locationTypesDTOList.Add(new LocationTypeDTO
                                 {
-                                    itemTypeId = reader.GetInt32(0),
-                                    itemTypeName = reader.GetString(1)
+                                    locationTypeId = reader.GetInt32(0),
+                                    locationTypeName = reader.GetString(1)
                                 });
                             }
                         }
@@ -43,7 +43,7 @@ namespace TestUser.DAL
                 }
                 connect.Close();
             }
-            return itemTypesDTOList;
+            return locationTypesDTOList;
         }
 
         public bool Update(int _id, string _name)
@@ -56,8 +56,8 @@ namespace TestUser.DAL
                 {
                     using (SqlCommand command = new SqlCommand(sqlExpUpdate, connect))
                     {
-                        command.Parameters.Add("@itemTypeId", SqlDbType.Int).Value = _id;
-                        command.Parameters.Add("@itemTypeName", SqlDbType.NVarChar).Value = _name;
+                        command.Parameters.Add("@locationTypeId", SqlDbType.Int).Value = _id;
+                        command.Parameters.Add("@locationTypeName", SqlDbType.NVarChar).Value = _name;
                         connect.Open();
                         command.ExecuteNonQuery();
                     }
@@ -81,7 +81,7 @@ namespace TestUser.DAL
                 {
                     using (SqlCommand command = new SqlCommand(sqlExpDelete, connect))
                     {
-                        command.Parameters.Add("@itemTypeId", SqlDbType.Int).Value = _id;
+                        command.Parameters.Add("@locationTypeId", SqlDbType.Int).Value = _id;
                         connect.Open();
                         command.ExecuteNonQuery();
                     }
@@ -106,7 +106,7 @@ namespace TestUser.DAL
                 {
                     using (SqlCommand command = new SqlCommand(sqlExpInsert, connect))
                     {
-                        command.Parameters.Add("@itemTypeName", SqlDbType.NVarChar).Value = _name;
+                        command.Parameters.Add("@locationTypeName", SqlDbType.NVarChar).Value = _name;
                         connect.Open();
                         command.ExecuteNonQuery();
                     }
@@ -122,9 +122,9 @@ namespace TestUser.DAL
 
         public bool IsNull(string _name)
         {
-            List<ItemTypeDTO> list = SelectAll();
-            ItemTypeDTO itemType = list.Where(p => p.itemTypeName == _name).FirstOrDefault();
-            return itemType != null ? true : false;
+            List<LocationTypeDTO> list = SelectAll();
+            LocationTypeDTO locationType = list.Where(p => p.locationTypeName == _name).FirstOrDefault();
+            return locationType != null ? true : false;
         }
-    }//end
+    }
 }

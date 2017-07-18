@@ -16,6 +16,7 @@ namespace TestUser.DAL
         string sqlExpUpdate = "update T_Position set positionName = @posName where positionId = @posId";
         string sqlExpDelete = "delete from T_Position where positionId = @posId";
         string sqlExpInsert = "insert into T_Position (positionName) values (@posName)";
+
         public List<PositionDTO> SelectAll()
         {
             List<PositionDTO> positionsDTOList = null;
@@ -33,8 +34,8 @@ namespace TestUser.DAL
                             {
                                 positionsDTOList.Add(new PositionDTO
                                 {
-                                    id = reader.GetInt32(0),
-                                    name = reader.GetString(1)
+                                    positionId = reader.GetInt32(0),
+                                    positionName = reader.GetString(1)
                                 });
                             }
                         }
@@ -44,9 +45,11 @@ namespace TestUser.DAL
             }
             return positionsDTOList;
         }
+
         public bool Update(int _id, string _name)
         {
             bool flag = false;
+            if (IsNull(_name)) return flag;
             try
             {
                 using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
@@ -68,6 +71,7 @@ namespace TestUser.DAL
             }
             return flag;
         }
+
         public bool Delete(int _id)
         {
             bool flag = false;
@@ -91,31 +95,18 @@ namespace TestUser.DAL
             }
             return flag;
         }
-        public PositionDTO Create(string _name)
-        {
-            List<PositionDTO> positionsDTOList = SelectAll();
-            PositionDTO positionDTO = positionsDTOList.Where(p => p.name == _name).FirstOrDefault();
-            if (positionDTO == null)
-            {
-                PositionDTO position = new PositionDTO()
-                {
-                    name = _name
-                };
-                this.Insert(position);
-                return position;
-            }
-            return null;
-        }
-        public bool Insert(PositionDTO positionDTO)
+
+        public bool Insert(string _name)
         {
             bool flag = false;
+            if (IsNull(_name)) return flag;
             try
             {
                 using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
                 {
                     using (SqlCommand command = new SqlCommand(sqlExpInsert, connect))
                     {
-                        command.Parameters.Add("@posName", SqlDbType.NVarChar).Value = positionDTO.name;
+                        command.Parameters.Add("@posName", SqlDbType.NVarChar).Value = _name;
                         connect.Open();
                         command.ExecuteNonQuery();
                     }
@@ -127,6 +118,13 @@ namespace TestUser.DAL
             {
             }
             return flag;
+        }
+
+        public bool IsNull(string _name)
+        {
+            List<PositionDTO> list = SelectAll();
+            PositionDTO pos = list.Where(p => p.positionName == _name).FirstOrDefault();
+            return pos!=null ? true : false;
         }
     }//end
 }

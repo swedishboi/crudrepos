@@ -7,7 +7,7 @@ namespace TestUser.DTO
 {
     public class ItemTypeDTO
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        public int itemTypeId { get; set; }
+        public string itemTypeName { get; set; }
     }
 }

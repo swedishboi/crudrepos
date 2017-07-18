@@ -10,8 +10,8 @@ namespace TestUser.Models
 {
     public class Position
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        public int positionId { get; set; }
+        public string positionName { get; set; }
         public List<Position> GetAll()
         {
             List<PositionDTO> positionsDTOList = new PositionRepository().SelectAll();
@@ -22,8 +22,8 @@ namespace TestUser.Models
             {
                 positionsModelsList.Add(new Position
                 {
-                    id = i.id,
-                    name = i.name
+                    positionId = i.positionId,
+                    positionName = i.positionName
                 });
             }
             return positionsModelsList;
@@ -38,16 +38,10 @@ namespace TestUser.Models
             bool flag = new PositionRepository().Update(_id, _name);
             return flag;
         }
-        public Position Add(string _name)
+        public bool Add(string _name)
         {
-            PositionDTO positionDTO = new PositionRepository().Create(_name);
-            if (positionDTO == null)
-                return null;
-            Position positionModel = new Position
-            {
-                name = positionDTO.name
-            };
-            return positionModel;
+            bool flag = new PositionRepository().Insert(_name);
+            return flag;
         }
     }
 }
