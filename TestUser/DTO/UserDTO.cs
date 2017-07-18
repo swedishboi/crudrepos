@@ -7,15 +7,14 @@ namespace TestUser.DTO
 {
     public class UserDTO
     {
-        public Guid id { get; set; }
+        public Guid personId { get; set; }
         public string name { get; set; }
         public string surname { get; set; }
         public string patronymic { get; set; }
-        public string mobile { get; set; }
+        public string email { get; set; }
         public string login { get; set; }
-        /*
-        public List<Position> position { get; set; }
-        public List<Profile> profile { get; set; }
-        */
+        public string password { get; set; }
+        public List<PositionDTO> position { get; set; }
+        public List<ProfileDTO> profile { get; set; }
     }//end
 }

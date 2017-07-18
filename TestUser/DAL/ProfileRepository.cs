@@ -13,6 +13,7 @@ namespace TestUser.DAL
     public class ProfileRepository
     {
         string sqlExpSelect = "select * from T_Profile";
+        string sqlExpSelectByUserId = "select * from T_Profile inner join T_User on T_Profile.profileId = T_User.profileId where personId = @personId";
         string sqlExpUpdate = "update T_Profile set profileName = @profileName where profileId = @profileId";
         string sqlExpDelete = "delete from T_Profile where profileId = @profileId";
         string sqlExpInsert = "insert into T_Profile (profileName) values (@profileName)";
@@ -124,6 +125,35 @@ namespace TestUser.DAL
             List<ProfileDTO> list = SelectAll();
             ProfileDTO profile = list.Where(p => p.profileName == _name).FirstOrDefault();
             return profile != null ? true : false;
+        }
+        public List<ProfileDTO> SelectByUserId(Guid _id)
+        {
+            List<ProfileDTO> profileList = null;
+            using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(sqlExpSelectByUserId, connect))
+                {
+                    command.Parameters.Add("@personId", SqlDbType.UniqueIdentifier).Value = _id;
+                    connect.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            profileList = new List<ProfileDTO>();
+                            while (reader.Read())
+                            {
+                                profileList.Add(new ProfileDTO()
+                                {
+                                    profileId = reader.GetInt32(0),
+                                    profileName = reader.GetString(1)
+                                });
+                            }
+                        }
+                    }
+                }
+                connect.Close();
+            }
+            return profileList;
         }
     }//end
 }

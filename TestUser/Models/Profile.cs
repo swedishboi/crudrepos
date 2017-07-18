@@ -45,5 +45,22 @@ namespace TestUser.Models
             bool flag = new ProfileRepository().Insert(_name);
             return flag;
         }
+
+        public List<Profile> GetByUserId(Guid _id)
+        {
+            List<ProfileDTO> profilesDTOList = new ProfileRepository().SelectByUserId(_id);
+            if (profilesDTOList == null)
+                return null;
+            List<Profile> profilesModelsList = new List<Profile>();
+            foreach (var i in profilesDTOList)
+            {
+                profilesModelsList.Add(new Profile
+                {
+                    profileId = i.profileId,
+                    profileName = i.profileName
+                });
+            }
+            return profilesModelsList;
+        }
     }//end
 }

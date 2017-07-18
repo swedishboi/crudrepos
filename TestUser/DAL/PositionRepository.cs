@@ -13,6 +13,7 @@ namespace TestUser.DAL
     public class PositionRepository
     {
         string sqlExpSelect = "select * from T_Position";
+        string sqlExpSelectByUserId = "select T_Position.positionName, T_Position.positionId from T_User inner join T_Position on T_User.positionId = T_Position.positionId whee T_User.personId  = @personId";
         string sqlExpUpdate = "update T_Position set positionName = @posName where positionId = @posId";
         string sqlExpDelete = "delete from T_Position where positionId = @posId";
         string sqlExpInsert = "insert into T_Position (positionName) values (@posName)";
@@ -125,6 +126,35 @@ namespace TestUser.DAL
             List<PositionDTO> list = SelectAll();
             PositionDTO pos = list.Where(p => p.positionName == _name).FirstOrDefault();
             return pos!=null ? true : false;
+        }
+        public List<PositionDTO> SelectByUserId (Guid _id)
+        {
+            List<PositionDTO> positionsList = null;
+            using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(sqlExpSelectByUserId, connect))
+                {
+                    command.Parameters.Add("@personId", SqlDbType.UniqueIdentifier).Value = _id;
+                    connect.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            positionsList = new List<PositionDTO>();
+                            while (reader.Read())
+                            {
+                                positionsList.Add(new PositionDTO()
+                                {
+                                    positionId = reader.GetInt32(1),
+                                    positionName = reader.GetString(0)
+                                });
+                            }
+                        }
+                    }
+                }
+                connect.Close();
+            }
+            return positionsList;
         }
     }//end
 }

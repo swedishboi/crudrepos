@@ -21,7 +21,7 @@ namespace TestUser.Models
             List<DateType> dateTypesModelsList = new List<DateType>();
             foreach (var i in dateTypesDTOList)
             {
-                DateTypesModelsList.Add(new DateType
+                dateTypesModelsList.Add(new DateType
                 {
                     dateTypeId = i.dateTypeId,
                     dateTypeName = i.dateTypeName

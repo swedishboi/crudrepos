@@ -14,87 +14,199 @@ namespace TestUser.DAL
     {
         string sqlExpSelect = "select T_Person.*, T_Authentication.login from T_Authentication inner join T_Person on T_Authentication.personId = T_Person.personId";
         string sqlExpInsert = "insert into T_User values (@id, @name, @surname, @patronymic, @mobile)";
-        public List<UserDTO> SelectAll()
+        public List<UserDTO> ListAllUsers()
         {
-            List<UserDTO> usersDTOList = null;
-            using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+            List<UserDTO> result = null;
+
+            using (SqlConnection conn = new SqlConnection((ConfigurationManager.ConnectionStrings["conStr"].ConnectionString)))
             {
-                using (SqlCommand command = new SqlCommand(sqlExpSelect, connect))
+                string cmdText = "SELECT dbo.T_Person.name, dbo.T_Person.surname, dbo.T_Person.patronymic, dbo.T_Person.email, dbo.T_Authentication.login, dbo.T_Authentication.password, dbo.T_Person.personId FROM dbo.T_Person INNER JOIN dbo.T_Authentication ON dbo.T_Person.personId = dbo.T_Authentication.personId ";
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
                 {
-                    connect.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+
                         if (reader.HasRows)
                         {
-                            usersDTOList = new List<UserDTO>();
+                            result = new List<UserDTO>();
+
                             while (reader.Read())
                             {
-                                usersDTOList.Add(new UserDTO
+
+                                result.Add(new UserDTO()
                                 {
-                                    id = reader.GetGuid(0),
-                                    name =reader.GetString(1),
-                                    surname =reader.GetString(2),
-                                    patronymic = reader.GetString(3),
-                                    mobile = reader.GetString(4),
-                                    login = reader.GetString(5)
+                                    personId = reader.GetGuid(6),
+                                    login = reader.GetString(4),
+                                    name = reader.GetString(0),
+                                    surname = reader.GetString(1),
+                                    patronymic = reader.GetString(2),
+                                    password = reader.GetString(5),
+                                    email = reader.GetString(3)
                                 });
                             }
                         }
                     }
                 }
-                connect.Close();
+
+                conn.Close();
             }
-            return usersDTOList;
+
+            return result;
+
         }
-        public UserDTO Create(Guid _id, string _name, string _surname, string _patronymic, string _mobile, string _login)
+
+        public UserDTO LogIn(string login, string password)
         {
-            List<UserDTO> usersDTOList = SelectAll();
-            if (usersDTOList == null)
-                return null;
-            UserDTO userDTO = usersDTOList.Where(p => p.login == _login).FirstOrDefault();
-            if (userDTO == null)
-            {
-                userDTO = new UserDTO
-                {
-                    id = _id,
-                    name = _name,
-                    surname = _surname,
-                    patronymic = _patronymic,
-                    mobile = _mobile,
-                    login = _login
-                };
-                this.Insert(userDTO);
-                return userDTO;
-            }
-            return null;
+            UserDTO user = (from t in this.ListAllUsers()
+                             where t.login == login
+                            && t.password == password
+                             select t).FirstOrDefault();
+
+            return user;
         }
-        public bool Insert (UserDTO userDTO)
+
+        public bool CreateUserTable(int positionId,Guid personId,int profileId)
         {
-            bool flag = false;
+            bool success = false;
+
             try
             {
-                using (SqlConnection connect = new SqlConnection(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString))
+
+                using (SqlConnection conn = new SqlConnection((ConfigurationManager.ConnectionStrings["conStr"].ConnectionString)))
                 {
-                    using (SqlCommand command = new SqlCommand(sqlExpInsert, connect))
+                    string cmdText = "INSERT INTO [AccountingOfMaterialValues].[dbo].[T_User]([personId],[positionId],[profileId]) VALUES (@PersonId,@PositionId,@ProfileId)";
+
+                    using (SqlCommand cmd = new SqlCommand(cmdText, conn))
                     {
-                        command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = userDTO.id;
-                        command.Parameters.Add("@name", SqlDbType.NVarChar).Value = userDTO.name;
-                        command.Parameters.Add("@surname", SqlDbType.NVarChar).Value = userDTO.surname;
-                        command.Parameters.Add("@patronymic", SqlDbType.NVarChar).Value = userDTO.patronymic;
-                        command.Parameters.Add("@mobile", SqlDbType.NVarChar).Value = userDTO.mobile;
-                        connect.Open();
-                        command.ExecuteNonQuery();
+                        cmd.Parameters.Add("@PersonId", SqlDbType.UniqueIdentifier).Value = personId;
+                        cmd.Parameters.Add("@PositionId", SqlDbType.Int).Value = positionId;
+                        cmd.Parameters.Add("@ProfileId", SqlDbType.Int).Value = profileId;
+
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
                     }
-                    connect.Close();
-                    flag = true;
+
+                    conn.Close();
                 }
+
+                success = true;
             }
-            catch (Exception)
+
+            catch (Exception ex) { }
+
+            return success;
+        }
+
+        public bool CreatePerson(UserDTO newuser)
+        {
+            bool success = false;
+
+            try
             {
 
-                throw;
+                using (SqlConnection conn = new SqlConnection((ConfigurationManager.ConnectionStrings["conStr"].ConnectionString)))
+                {
+                    string cmdText = " INSERT INTO [AccountingOfMaterialValues].[dbo].[T_Person]([personId],[name],[surname],[patronymic],[email]) VALUES (@ID,@Name,@Surname,@Patronymic,@Email)";
+
+                    using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                    {
+                        cmd.Parameters.Add("@ID", SqlDbType.UniqueIdentifier).Value = newuser.personId;
+                        cmd.Parameters.Add("@Name", SqlDbType.VarChar).Value = newuser.name;
+                        cmd.Parameters.Add("@Surname", SqlDbType.VarChar).Value = newuser.surname;
+                        cmd.Parameters.Add("@Patronymic", SqlDbType.VarChar).Value = newuser.patronymic;
+                        cmd.Parameters.Add("@Email", SqlDbType.VarChar).Value = newuser.email;
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    conn.Close();
+                }
+
+                success = true;
             }
-            return flag;
+
+            catch (Exception ex) { }
+
+            return success;
+        }
+
+        public bool CreateAuthentication(UserDTO newuser)
+        {
+            bool success = false;
+
+            try
+            {
+
+                using (SqlConnection conn = new SqlConnection((ConfigurationManager.ConnectionStrings["conStr"].ConnectionString)))
+                {
+                    string cmdText = "INSERT INTO [AccountingOfMaterialValues].[dbo].[T_Authentication] ([login],[password],[personId]) VALUES (@Login,@Password,@PersonId)";
+
+                    using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                    {
+                        cmd.Parameters.Add("@PersonId", SqlDbType.UniqueIdentifier).Value = newuser.personId;
+                        cmd.Parameters.Add("@Login", SqlDbType.VarChar).Value = newuser.login;
+                        cmd.Parameters.Add("@Password", SqlDbType.VarChar).Value = newuser.password;
+                        
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    conn.Close();
+                }
+
+                success = true;
+            }
+
+            catch (Exception ex) { }
+
+            return success;
+        }
+
+
+        public bool Register(string login, string password, string email, Guid id, string name, string patronymic,string surname,List<PositionDTO> positionList,List<ProfileDTO> profileList)
+        {
+            bool success = false;
+            List<UserDTO> userList = this.ListAllUsers();
+
+            UserDTO testUser = userList.Where(p => p.login == login).FirstOrDefault();
+
+            if (testUser == null)
+            {
+                UserDTO user = new UserDTO()
+                {
+                    login = login,
+                    password = password,
+                    email = email,                   
+                    personId=id,
+                    name=name,
+                    patronymic=patronymic,
+                    surname=surname,
+                    position=positionList,
+                    profile=profileList
+                };
+
+                this.CreatePerson(user);
+                this.CreateAuthentication(user);
+                List<PositionDTO> listPosition = user.position;
+                List<ProfileDTO> listProfile = user.profile;
+                int count = listPosition.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    this.CreateUserTable(listPosition[i].positionId, user.personId, listProfile[i].profileId);
+                }                
+                success=true;
+                return success;
+            }
+
+            return success;
+
+
         }
     }//end
 }
